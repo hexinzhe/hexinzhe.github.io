@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="背景刚刚搭建了hexo博客，托管在Git Page和Coding上，感觉良好。但是hexo写完文章后，需要在电脑上生成，发布。比起动态博客可在多平台发布来说，实在麻烦。无意中看到Hexo 服务器端布署及 Dropbox 同步这篇文章，当时就震憾了，原来静态博客还能这样玩。虽然他是把博客部署到服务器上，而我是把博客托管在Git Page上，但是主体思路是相通的，只需经过简单的修改就能为我所用。 说做">
+<meta name="keywords" content="博客,linux,hexo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用dropbox和服务器搭键hexo自动部署环境">
+<meta property="og:url" content="http://yoursite.com/2018/11/18/搭建hexo自动部署/index.html">
+<meta property="og:site_name" content="hexinzhe - blog">
+<meta property="og:description" content="背景刚刚搭建了hexo博客，托管在Git Page和Coding上，感觉良好。但是hexo写完文章后，需要在电脑上生成，发布。比起动态博客可在多平台发布来说，实在麻烦。无意中看到Hexo 服务器端布署及 Dropbox 同步这篇文章，当时就震憾了，原来静态博客还能这样玩。虽然他是把博客部署到服务器上，而我是把博客托管在Git Page上，但是主体思路是相通的，只需经过简单的修改就能为我所用。 说做">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-11-17T18:15:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="利用dropbox和服务器搭键hexo自动部署环境">
+<meta name="twitter:description" content="背景刚刚搭建了hexo博客，托管在Git Page和Coding上，感觉良好。但是hexo写完文章后，需要在电脑上生成，发布。比起动态博客可在多平台发布来说，实在麻烦。无意中看到Hexo 服务器端布署及 Dropbox 同步这篇文章，当时就震憾了，原来静态博客还能这样玩。虽然他是把博客部署到服务器上，而我是把博客托管在Git Page上，但是主体思路是相通的，只需经过简单的修改就能为我所用。 说做">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/18/搭建hexo自动部署/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>利用dropbox和服务器搭键hexo自动部署环境 | hexinzhe - blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">hexinzhe - blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/18/搭建hexo自动部署/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="hexinzhe">
+      <meta itemprop="description" content="want to write">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hexinzhe - blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">利用dropbox和服务器搭键hexo自动部署环境
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-11-18 02:15:43" itemprop="dateCreated datePublished" datetime="2018-11-18T02:15:43+08:00">2018-11-18</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>刚刚搭建了hexo博客，托管在Git Page和Coding上，感觉良好。但是hexo写完文章后，需要在电脑上生成，发布。比起动态博客可在多平台发布来说，实在麻烦。<br>无意中看到<a href="http://lucifr.com/2013/06/02/hexo-on-cloud-with-dropbox-and-vps/" target="_blank" rel="noopener">Hexo 服务器端布署及 Dropbox 同步</a>这篇文章，当时就震憾了，原来静态博客还能这样玩。虽然他是把博客部署到服务器上，而我是把博客托管在Git Page上，但是主体思路是相通的，只需经过简单的修改就能为我所用。</p>
+<p>说做就做吧。<br><a id="more"></a></p>
+<blockquote>
+<p>本文主要讲述了如何通过多种设备(PC，MAC，IOS，Andriod)远程撰写及发布基于<code>hexo</code>系统的博客。<br>工作流程是: 远程撰写，然后通过 Dropbox 同步文章到装有 hexo 构建环境的电脑上，再自动触发 <code>hexo d -g</code> 命令生成网站并发布。<br>推荐将 hexo 构建环境安装在 VPS 或者专用服务器上，或者一台常开并可以访问外网的电脑上。如果是多人使用的电脑，强烈建议安装一个 Linux 的虚拟机，在虚拟机中配置 hexo 构建环境。给虚拟机设上密码，保证您的信息安全。虚拟机还能带来一定程度的移动性。</p>
+</blockquote>
+<h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><p>本方案搭建完成后高度自动化，但是需要一些前提条件:</p>
+<ul>
+<li>一台linux电脑，<strong>512M内存起</strong><br>  我使用的是一家美国vps，512m内存，一年70。比起服务器部署而言，此种方案对服务器所在地域，带宽质量没有要求，只要能连接Dropbox既可，所以越便宜越好。不过由于Dropbox<strong>占用内存过大</strong>，<strong>不推荐</strong>512M以下的vps。已经有512M以下的朋友可以一试，没有的话推荐直接上512M的。</li>
+<li>国内访问Dropbox当然需要翻墙工具了</li>
+<li>需要将hexo目录放置在Dropbox内</li>
+</ul>
+<h2 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h2><ol>
+<li>通过各种支持Dropbox的设备写文章</li>
+<li>Dropbox自动同步到已经搭建好hexo环境的服务器上</li>
+<li>构建环境通过一定手段监听<code>hexo/source/_post</code>目录的变化，发现变更后就触发<code>hexo d -g</code> 命令自动部署到Git Page和Coding上</li>
+</ol>
+<p>关键在于第三步。<br>此处借用<a href="http://opoo.org/octopress-remote-blogging/" target="_blank" rel="noopener">Alex Lin 的方案</a>，通过<a href="https://github.com/seb-m/pyinotify" target="_blank" rel="noopener">Pyinotify</a>来进行监听操作。</p>
+<h2 id="构建环境"><a href="#构建环境" class="headerlink" title="构建环境"></a>构建环境</h2><blockquote>
+<p>本文下面的示例、代码等都是以<code>CentOS  6</code>做为构建环境的。</p>
+</blockquote>
+<h3 id="1-安装配置hexo"><a href="#1-安装配置hexo" class="headerlink" title="1. 安装配置hexo"></a>1. 安装配置hexo</h3><p>安装很简单，请自行Google吧。我仅仅说一点，因为是通过Dropbox同步的，所以hexo目录需要放置在Dropbox目录。</p>
+<h3 id="2-安装配置Dropbox"><a href="#2-安装配置Dropbox" class="headerlink" title="2. 安装配置Dropbox"></a>2. 安装配置Dropbox</h3><p>下载安装 Dropbox 32-bit:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#cd ~ &amp;&amp; wget -O - &quot;https://www.dropbox.com/download?plat=lnx.x86&quot; | tar xzf -</span><br></pre></td></tr></table></figure></p>
+<p>64-bit:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#cd ~ &amp;&amp; wget -O - &quot;https://www.dropbox.com/download?plat=lnx.x86\_64&quot; | tar xzf -</span><br></pre></td></tr></table></figure></p>
+<p>接着，从新建的 .dropbox-dist 文件夹运行 Dropbox 守护程序。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#~/.dropbox-dist/dropboxd</span><br></pre></td></tr></table></figure></p>
+<p>启动后会提示 Dropbox 客户端还没有链接到相关账户，并显示一个链接，如 <a href="https://www.dropbox.com/cli\_linux?host\_id=XXXXXX" target="_blank" rel="noopener">https://www.dropbox.com/cli\_linux?host\_id=XXXXXX</a> ，<strong>复制链接到浏览器</strong>（不一定是构建环境所在的电脑），登录 Dropbox，此时在构建环境的电脑的 /root 目录中将会产生 Dropbox 目录，并且已经同步了 Dropbox 中的内存到该目录。这个登录链接过程一般只需要做一次，如果以后启动 Dropbox 还提示需要链接，做同样操作即可。<br>登录上之后，将该进程停掉。接着，下载 Dropbox 控制脚本，便于我们管理 Dropbox。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#cd ~</span><br><span class="line">#wget http://www.dropbox.com/download?dl=packages/dropbox.py</span><br><span class="line">#chmod +x dropbox.py</span><br></pre></td></tr></table></figure>
+<p>可以使用以下命令启动、停止和查看 Dropbox 状态<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#~/dropbox.py start</span><br><span class="line">#~/dropbox.py stop</span><br><span class="line">#~/dropbox.py status</span><br></pre></td></tr></table></figure></p>
+<p>最后，一定要将hexo目录放进Dropbox。<br>如果hexo本来是本地生成的，请<strong>确保Nodejs版本以及hexo版本和vps端一致，不然可能会出问题</strong>。最好的解决方式是在vps端再初始化一个hexo，放置在Dropbox内，然后从本地将关键配置文件和博客文本替换即可。</p>
+<h3 id="3-编写调用hexo的脚本"><a href="#3-编写调用hexo的脚本" class="headerlink" title="3. 编写调用hexo的脚本"></a>3. 编写调用hexo的脚本</h3><p>此处假设hexo在<code>/root/Dropbox/Hexo</code>内</p>
+<p>文件路径<code>/root/hexogene.sh</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/sh</span><br><span class="line">cd /root/Dropbox/Hexo</span><br><span class="line">/root/.nvm/versions/node/v4.4.5/bin/hexo cl</span><br><span class="line">/root/.nvm/versions/node/v4.4.5/bin/hexo d -g</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注意</strong>:请通过which hexo查找hexo路径<br>这个脚本可能还需要修改才能在你的机子上正确运行，请自行测试，测试成功后再进行下一步</p>
+</blockquote>
+<h3 id="4-安装配置Pyinotify"><a href="#4-安装配置Pyinotify" class="headerlink" title="4. 安装配置Pyinotify"></a>4. 安装配置Pyinotify</h3><p>利用 Linux 的 inotify 机制，可以很轻松的监听文件系统的变化。<a href="https://github.com/seb-m/pyinotify" target="_blank" rel="noopener">Pyinotify</a> 是 inotify 的 Python 语言的实现版本。<br>安装要求</p>
+<blockquote>
+<p>Linux 内核版本 ≥ 2.6.13<br>Python 版本 ≥ 2.4 (including Python 3.x)</p>
+</blockquote>
+<p>由于在之前的安装过程中已经安装了 git 和 python，这里可以调用以下命令安装 Pyinotify<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#cd ~</span><br><span class="line">#git clone git://github.com/seb-m/pyinotify.git</span><br><span class="line">#cd pyinotify</span><br><span class="line">#python setup.py install</span><br></pre></td></tr></table></figure></p>
+<h3 id="5-编写hexowatcher程序"><a href="#5-编写hexowatcher程序" class="headerlink" title="5. 编写hexowatcher程序"></a>5. 编写hexowatcher程序</h3><p>安装完Pyinotify后我们写一个Python脚本来监听<code>hexo</code>相应目录的变化。这是本工作流最核心的部分。<br>文件路径<code>/root/hexowatcher.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pyinotify</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line">HEXO_RAKE_SHELL=<span class="string">"/root/hexogene.sh"</span></span><br><span class="line">WATCH_TARGET=<span class="string">"/root/Dropbox/Hexo/source/_posts"</span></span><br><span class="line">WATCH_FILE=<span class="string">"/root/Dropbox/Hexo/source/_posts/trigger.txt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">checkevent</span><span class="params">(eventname, pathname)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> pathname == WATCH_FILE:</span><br><span class="line">        <span class="comment">#print eventname, ": /root/Dropbox/Hexo/source/_posts/trigger.txt changed, call rake ..."</span></span><br><span class="line">        p = subprocess.Popen(HEXO_RAKE_SHELL, close_fds=<span class="keyword">True</span>, bufsize=<span class="number">1</span>, shell=<span class="keyword">True</span>, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)</span><br><span class="line">        p.communicate()</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HexoSourceModifyHandler</span><span class="params">(pyinotify.ProcessEvent)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">process_IN_ATTRIB</span><span class="params">(self, event)</span>:</span></span><br><span class="line">        <span class="comment">#print "ATTRIB event:", event.pathname</span></span><br><span class="line">        checkevent(<span class="string">"ATTRIB"</span>, event.pathname)</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">process_IN_MODIFY</span><span class="params">(self, event)</span>:</span></span><br><span class="line">        <span class="comment">#print "MODIFY event:", event.pathname</span></span><br><span class="line">        checkevent(<span class="string">"MODIFY"</span>, event.pathname)</span><br><span class="line">          </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    wm = pyinotify.WatchManager()</span><br><span class="line">    <span class="comment">#pyinotify.IN_MODIFY, pyinotify.ALL_EVENTS</span></span><br><span class="line">    wm.add_watch(WATCH_TARGET, pyinotify.IN_ATTRIB + pyinotify.IN_MODIFY, rec=<span class="keyword">True</span>)</span><br><span class="line">      </span><br><span class="line">    eh = HexoSourceModifyHandler()</span><br><span class="line"> </span><br><span class="line">    notifier = pyinotify.Notifier(wm, eh)</span><br><span class="line">    <span class="comment">#notifier = pyinotify.Notifier(wm); </span></span><br><span class="line">    notifier.loop() </span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>: </span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></p>
+<p>在后台运行该程序:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#~/hexowatcher.py &amp;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>还有一点需要注意的就是，脚本中只监听了_post中一个<code>trigger.txt</code>文件，而并没有监听整个目录。<br>是因为，如果监听整个目录，当文章还没有写完就保存时，Dropbox同步后上面的程序就会执行，这样会导致还没有写完的文章发布出去。<br>所以目前的解决方法是，文章写完之后修改一下 trigger.txt 的文件（随便该点啥）并保存，系统监听到 trigger.txt 的变化才执行构建命令。</p>
+</blockquote>
+<h3 id="6-检查"><a href="#6-检查" class="headerlink" title="6. 检查"></a>6. 检查</h3><p>到这一步已经搭建完成，然后测试一下，在本地打开Dropbox的hexo目录，随便修改些什么，然后新建一个trigger.txt（要在Dropbox的<code>hexo/source/_posts</code>目录下建立）。然后等上半分钟，如果没有问题，就会看到Dropbox变成了同步状态。然后打开自己的Git Page，查看修改是否上传。<br>之后可以用手机或ipad进行测试，登录移动版Dropbox，在_posts目录上编写文章，写完修改一下trigger.txt。然后停两分钟查看Git Page是否更新了。</p>
+<h2 id="不足"><a href="#不足" class="headerlink" title="不足"></a>不足</h2><ul>
+<li>要花钱<br>  对于很多人来说，用Git Page的原因就是因为不用花钱，虽然我这个方案花钱不多，但毕竟不免费。</li>
+<li>不太优雅<br>  修改trigger的方式实在是。。。很怪异。</li>
+<li>如果只有ulysses，或者只想用ulysses的人士（此处指iOS端）<br>  因其没有Dropbox同步，想上传文章以及修改trigger文件方式就太麻烦了，我目前可以提供一种思路，将这些操作变的简单一些。<br>前提：<ul>
+<li>神器workflow</li>
+<li>ulysses<br>  思路很简单，就是用workflow做一个工作流，可以实现将文章上传到<code>hexo/_posts</code>目录，并自动修改trigger.txt实现触发generate。通过workflow的share功能，可以在ulysses的分享界面将md文件传送给workflow，也就能够实现整个工作流的运转。<br>因离本题较远，不再多说了。</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/博客/" rel="tag"># 博客</a>
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/hexo/" rel="tag"># hexo</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/18/configs/sorts/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/18/Untitled/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">hexinzhe</p>
+              <p class="site-description motion-element" itemprop="description">want to write</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前提"><span class="nav-number">2.</span> <span class="nav-text">前提</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现方案"><span class="nav-number">3.</span> <span class="nav-text">实现方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建环境"><span class="nav-number">4.</span> <span class="nav-text">构建环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-安装配置hexo"><span class="nav-number">4.1.</span> <span class="nav-text">1. 安装配置hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-安装配置Dropbox"><span class="nav-number">4.2.</span> <span class="nav-text">2. 安装配置Dropbox</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-编写调用hexo的脚本"><span class="nav-number">4.3.</span> <span class="nav-text">3. 编写调用hexo的脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-安装配置Pyinotify"><span class="nav-number">4.4.</span> <span class="nav-text">4. 安装配置Pyinotify</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-编写hexowatcher程序"><span class="nav-number">4.5.</span> <span class="nav-text">5. 编写hexowatcher程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-检查"><span class="nav-number">4.6.</span> <span class="nav-text">6. 检查</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不足"><span class="nav-number">5.</span> <span class="nav-text">不足</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hexinzhe</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
