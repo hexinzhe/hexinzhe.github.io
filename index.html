@@ -302,7 +302,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/18/Untitled/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/18/为什么要开始写博客/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hexinzhe">
@@ -322,7 +322,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/11/18/Untitled/" class="post-title-link" itemprop="http://yoursite.com/index.html">Untitled</a>
+                <a href="/2018/11/18/为什么要开始写博客/" class="post-title-link" itemprop="http://yoursite.com/index.html">为什么要开始写博客</a>
               
             
           </h1>
@@ -347,7 +347,7 @@
                 
               
 
-              <time title="Created: 2018-11-18 02:15:43 / Modified: 03:04:44" itemprop="dateCreated datePublished" datetime="2018-11-18T02:15:43+08:00">2018-11-18</time>
+              <time title="Created: 2018-11-18 15:55:20 / Modified: 17:38:37" itemprop="dateCreated datePublished" datetime="2018-11-18T15:55:20+08:00">2018-11-18</time>
             
 
             
@@ -386,23 +386,20 @@
 
       
         
+          <h2 id="为什么之前不写博客"><a href="#为什么之前不写博客" class="headerlink" title="为什么之前不写博客"></a>为什么之前不写博客</h2><p>很久之前（2016）建立了 hexo 博客，但是一直没用。这是因为在当时觉得自己没什么积累，不应该写博客。我见多了网上的流水账博客，自己写的笔记没头没尾没讲解的，就直接 po 到网上了，这种博客除了干扰人搜索之外，没有任何用处。我对这种低质的笔记博客是深恶痛绝的，甚至我都怀疑对于博主自己能有多大用。等一年两年过去，再看这种没头没尾的笔记，只有流水账记录，缺乏分析的笔记，真的还能想起多少有用的吗？<br>因为不想成为这种低质量的垃圾生产者，当然也存在羞于表达的因素，我没有写博客，而只是记笔记。在记笔记的时候，我也会想象着我是在教别人，希望尽可能做到讲解完整，有头有尾，条理清晰。之前我觉得，这也就够了。</p>
+<h2 id="那又为什么改变主意了呢？"><a href="#那又为什么改变主意了呢？" class="headerlink" title="那又为什么改变主意了呢？"></a>那又为什么改变主意了呢？</h2><p>但是我渐渐意识到，这不够，有几点因素<br>
+          <!--noindex-->
           
-            <h2 id="安装-hexo"><a href="#安装-hexo" class="headerlink" title="安装 hexo"></a>安装 hexo</h2><p>首先是创建一个新的文件夹来存放 hexo 所有文件，然后<code>hexo init &lt;path&gt;</code>这个目录。接着是迁移原有的文章，hexo 的文章默认存储在 source 目录下，所以直接 copy 原来目录的 source 到新的目录即可。</p>
-<h2 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h2><h3 id="git"><a href="#git" class="headerlink" title="git"></a>git</h3><p>首先是 git page 插件。</p>
-<pre><code>npm install hexo-deployer-git --save
-</code></pre><p>接着指定自己的 git page 地址：<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">git</span></span><br><span class="line"><span class="attr">  repo:</span></span><br><span class="line"><span class="attr">    github:</span> <span class="string">git@github.com:hexinzhe/hexinzhe.github.io.git,master</span></span><br><span class="line"><span class="attr">    coding:</span> <span class="string">git@git.coding.net:hexinzhe/blog.git,master</span></span><br><span class="line"><span class="attr">  branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure></p>
-<p>然后<code>hexo d</code>测试一下，上 git 上看看是否更新了</p>
-<h3 id="rss"><a href="#rss" class="headerlink" title="rss"></a>rss</h3><p>接着是 rss 生成器</p>
-<pre><code>npm i hexo-generator-feed --save
-</code></pre><p>填上配置<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">feed:</span></span><br><span class="line"><span class="attr">     type:</span> <span class="string">atom</span></span><br><span class="line"><span class="attr">     path:</span> <span class="string">atom.xml</span></span><br><span class="line"><span class="attr">     limit:</span> <span class="number">20</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h3><p>搜索非常重要</p>
-<pre><code>npm i hexo-generator-search --save
-</code></pre><p>配置：<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">search:</span></span><br><span class="line"><span class="attr">    path:</span> <span class="string">search.xml</span></span><br><span class="line"><span class="attr">    field:</span> <span class="string">post</span></span><br></pre></td></tr></table></figure></p>
-
-          
+            <div class="post-button text-center">
+              <a class="btn" href="/2018/11/18/为什么要开始写博客/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+         
+          <!--/noindex-->
         
       
-    </div>
+    </p></div>
 
     
 
@@ -499,7 +496,7 @@
                 
               
 
-              <time title="Created: 2018-11-18 02:15:43 / Modified: 02:49:08" itemprop="dateCreated datePublished" datetime="2018-11-18T02:15:43+08:00">2018-11-18</time>
+              <time title="Created: 2018-11-18 02:15:43 / Modified: 16:55:25" itemprop="dateCreated datePublished" datetime="2018-11-18T02:15:43+08:00">2018-11-18</time>
             
 
             
@@ -539,7 +536,7 @@
       
         
           
-            {"":["搭建hexo自动部署.md","trigger.txt","untitled.md","_book"],"__positions":{"trigger.txt":2,"_book/asset":4001,"untitled.md":3,"_book":4,"搭建hexo自动部署.md":1},"_book":["asset"],"__raw_positions":{"_book":4,"_book/asset":1,"untitled.md":3,"搭建hexo自动部署.md":1,"trigger.txt":2}}
+            {"":["draft.md","untitled.md","搭建hexo自动部署.md","trigger.txt","_book"],"__positions":{"draft.md":1,"trigger.txt":4,"_book/asset":5001,"搭建hexo自动部署.md":3,"untitled.md":2,"_book":5},"_book":["asset"],"__raw_positions":{"draft.md":1,"_book":5,"_book/asset":1,"搭建hexo自动部署.md":3,"untitled.md":2,"trigger.txt":4}}
           
         
       
@@ -657,7 +654,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-11-18 02:41:08" itemprop="dateModified" datetime="2018-11-18T02:41:08+08:00">2018-11-18</time>
+                <time title="Modified: 2018-11-18 17:01:05" itemprop="dateModified" datetime="2018-11-18T17:01:05+08:00">2018-11-18</time>
               
             
           </span>
@@ -805,7 +802,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">3</span>
+                      
+                    
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
